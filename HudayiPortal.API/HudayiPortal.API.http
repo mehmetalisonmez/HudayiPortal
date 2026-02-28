@@ -1,0 +1,6 @@
+@HudayiPortal.API_HostAddress = http://localhost:5252
+
+GET {{HudayiPortal.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

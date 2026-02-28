@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudayiPortal.API", "HudayiPortal.API\HudayiPortal.API.csproj", "{942C58E4-4E6E-4682-AB02-9423C9C0A515}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{78B29DC4-7A86-4A79-858E-5D267BA96A29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E6585EDE-7B21-43CA-B538-8695531D87A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{0E8990DF-F18E-4B6B-A448-5D13F8623BD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudayiPortal.Application", "HudayiPortal.Application\HudayiPortal.Application.csproj", "{C202AEF4-A2A2-423B-80C3-0375D8A282C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudayiPortal.Domain", "HudayiPortal.Domain\HudayiPortal.Domain.csproj", "{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudayiPortal.Infrastructure", "HudayiPortal.Infrastructure\HudayiPortal.Infrastructure.csproj", "{48ACB8D8-433B-437F-845F-43382E8275E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudayiPortal.Presentation", "HudayiPortal.Presentation\HudayiPortal.Presentation.csproj", "{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{942C58E4-4E6E-4682-AB02-9423C9C0A515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{942C58E4-4E6E-4682-AB02-9423C9C0A515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{942C58E4-4E6E-4682-AB02-9423C9C0A515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{942C58E4-4E6E-4682-AB02-9423C9C0A515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C202AEF4-A2A2-423B-80C3-0375D8A282C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C202AEF4-A2A2-423B-80C3-0375D8A282C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C202AEF4-A2A2-423B-80C3-0375D8A282C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C202AEF4-A2A2-423B-80C3-0375D8A282C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48ACB8D8-433B-437F-845F-43382E8275E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48ACB8D8-433B-437F-845F-43382E8275E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48ACB8D8-433B-437F-845F-43382E8275E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48ACB8D8-433B-437F-845F-43382E8275E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E6585EDE-7B21-43CA-B538-8695531D87A2} = {78B29DC4-7A86-4A79-858E-5D267BA96A29}
+		{0E8990DF-F18E-4B6B-A448-5D13F8623BD7} = {78B29DC4-7A86-4A79-858E-5D267BA96A29}
+		{C202AEF4-A2A2-423B-80C3-0375D8A282C7} = {E6585EDE-7B21-43CA-B538-8695531D87A2}
+		{F51F8C1D-7E32-46C9-9E47-44DA11DAEAED} = {E6585EDE-7B21-43CA-B538-8695531D87A2}
+		{48ACB8D8-433B-437F-845F-43382E8275E9} = {0E8990DF-F18E-4B6B-A448-5D13F8623BD7}
+		{E22C5063-0D0E-4B37-BF5E-FFCFC1C426B7} = {0E8990DF-F18E-4B6B-A448-5D13F8623BD7}
+	EndGlobalSection
+EndGlobal
