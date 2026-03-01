@@ -1,20 +1,18 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class Mesaj : Entity
+public class Mesaj
 {
-	public Guid GondericiId { get; set; }
+	public int Id { get; set; }
+	public int GonderenId { get; set; }
+	public int? AliciId { get; set; }
+	public int? ChatGrupId { get; set; }
+	public string MesajIcerigi { get; set; } = null!;
+	public bool? OkunduMu { get; set; }
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
-	// Eğer AliciId doluysa -> Bireysel Mesaj (DM)
-	// Eğer ChatGrupId doluysa -> Grup Mesajı
-	public Guid? AliciId { get; set; }
-	public Guid? ChatGrupId { get; set; }
-
-	public string Icerik { get; set; } = default!;
-	public bool OkunduMu { get; set; }
-
-	// --- Navigation Properties ---
-	public Kullanici Gonderici { get; set; }
+	// Navigation properties
+	public Kullanici Gonderen { get; set; } = null!;
 	public Kullanici? Alici { get; set; }
-	public ChatGrup? ChatGrup { get; set; }
+	public ChatGrubu? ChatGrup { get; set; }
 }

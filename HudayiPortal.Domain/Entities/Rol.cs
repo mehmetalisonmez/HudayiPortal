@@ -1,10 +1,13 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class Rol : Entity
+public class Rol
 {
-	public string RolAdi { get; set; } // "Öğrenci", "Yönetici", "Belletmen"
+	public int Id { get; set; }
+	public string RolAdi { get; set; } = null!;
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
-	// Navigation Property (Bir rolün birden çok kullanıcısı olabilir)
-	public ICollection<Kullanici> Kullanicilar { get; set; }
+	// Navigation properties
+	public ICollection<Kullanici> Kullanicilar { get; set; } = new List<Kullanici>();
+	public ICollection<Duyuru> Duyurular { get; set; } = new List<Duyuru>();
 }

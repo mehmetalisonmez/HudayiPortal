@@ -1,17 +1,20 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class GunlukYoklama : Entity
+public sealed class GunlukYoklama
 {
-	public Guid YoklamaTurId { get; set; }
-	public Guid OgrenciId { get; set; }
-	public Guid YoklamayiAlanPersonelId { get; set; }
-
-	public DateTime Tarih { get; set; }
-	public bool VarMi { get; set; }
+	public int Id { get; set; }
+	public int KullaniciId { get; set; }
+	public int YoklamaTurId { get; set; }
+	public DateOnly Tarih { get; set; }
+	public bool Durum { get; set; }
 	public string? Aciklama { get; set; }
+	public int? YoklamayiAlanPersonelId { get; set; }
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public DateTime? GuncellenmeTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
-	public YoklamaTur YoklamaTur { get; set; }
-	public Kullanici Ogrenci { get; set; }
-	public Kullanici YoklamayiAlanPersonel { get; set; }
+	// Navigation properties
+	public Kullanici Kullanici { get; set; } = null!;
+	public YoklamaTuru YoklamaTur { get; set; } = null!;
+	public Kullanici? YoklamayiAlanPersonel { get; set; }
 }

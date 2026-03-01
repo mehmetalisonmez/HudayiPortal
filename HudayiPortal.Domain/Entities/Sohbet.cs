@@ -1,12 +1,16 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class Sohbet : Entity
+public class Sohbet
 {
-	public Guid SohbetGrupId { get; set; }
+	public int Id { get; set; }
+	public int SohbetGrupId { get; set; }
 	public DateTime Tarih { get; set; }
-	public string KonuBasligi { get; set; }
+	public string? KonuBasligi { get; set; }
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public DateTime? GuncellenmeTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
-	public SohbetGrup SohbetGrup { get; set; }
-	public ICollection<SohbetYoklama> Yoklamalar { get; set; }
+	// Navigation properties
+	public SohbetGrubu SohbetGrup { get; set; } = null!;
+	public ICollection<SohbetYoklama> SohbetYoklamalari { get; set; } = new List<SohbetYoklama>();
 }

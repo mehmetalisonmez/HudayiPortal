@@ -1,12 +1,16 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class Duyuru : Entity
+public class Duyuru
 {
-	public string Baslik { get; set; }
-	public string Icerik { get; set; }
-	public Guid? HedefRolId { get; set; } // Null ise herkese açık
-	public DateTime YayinTarihi { get; set; }
+	public int Id { get; set; }
+	public string Baslik { get; set; } = null!;
+	public string Icerik { get; set; } = null!;
+	public int? HedefRolId { get; set; }
+	public DateTime? YayinTarihi { get; set; }
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public DateTime? GuncellenmeTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
+	// Navigation properties
 	public Rol? HedefRol { get; set; }
 }

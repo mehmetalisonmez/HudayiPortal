@@ -1,14 +1,19 @@
-﻿using HudayiPortal.Domain.Abstraction;
+﻿namespace HudayiPortal.Domain.Entities;
 
-namespace HudayiPortal.Domain.Entities;
-public sealed class SohbetYoklama : Entity
+public class SohbetYoklama
 {
-	public Guid SohbetId { get; set; }
-	public Guid KullaniciId { get; set; }
+	public int Id { get; set; }
+	public int SohbetId { get; set; }
+	public int KullaniciId { get; set; }
+	public bool KatilimDurumu { get; set; }
+	public string? MazeretAciklamasi { get; set; }
+	public int? YoklamayiAlanPersonelId { get; set; }
+	public DateTime? OlusturulmaTarihi { get; set; }
+	public DateTime? GuncellenmeTarihi { get; set; }
+	public bool? SilindiMi { get; set; }
 
-	public bool KatildiMi { get; set; } // Var/Yok
-	public string? Mazeret { get; set; }
-
-	public Sohbet Sohbet { get; set; }
-	public Kullanici Ogrenci { get; set; }
+	// Navigation properties
+	public Sohbet Sohbet { get; set; } = null!;
+	public Kullanici Kullanici { get; set; } = null!;
+	public Kullanici? YoklamayiAlanPersonel { get; set; }
 }
