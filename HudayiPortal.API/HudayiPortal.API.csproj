@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.24">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,10 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\HudayiPortal.Application\HudayiPortal.Application.csproj" />
     <ProjectReference Include="..\HudayiPortal.Infrastructure\HudayiPortal.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

@@ -28,7 +28,7 @@ public class Repository<T> : IRepository<T> where T : class
 
 	public IQueryable<T> Where(Expression<Func<T, bool>> predicate)
 	{
-		return _dbSet.Where(predicate).AsNoTracking();
+		return _dbSet.Where(predicate);
 	}
 
 	public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
