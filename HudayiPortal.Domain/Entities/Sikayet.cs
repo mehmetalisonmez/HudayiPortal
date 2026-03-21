@@ -9,6 +9,7 @@ public class Sikayet
 	public string? Cevap { get; set; }
 	public int? Durum { get; set; }
 	public DateTime? OlusturulmaTarihi { get; set; }
+	public DateTime? GuncellenmeTarihi { get; set; }
 	public DateTime? CevaplanmaTarihi { get; set; }
 	public bool? SilindiMi { get; set; }
 

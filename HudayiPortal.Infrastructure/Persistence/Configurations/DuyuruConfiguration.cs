@@ -19,6 +19,8 @@ public class DuyuruConfiguration : IEntityTypeConfiguration<Duyuru>
 		builder.Property(d => d.Icerik)
 			.IsRequired();
 
+		builder.Property(d => d.GecerlilikTarihi);
+
 		builder.Property(d => d.YayinTarihi)
 			.HasDefaultValueSql("getdate()");
 

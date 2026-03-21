@@ -25,6 +25,8 @@ public class ApplicationDbContext : DbContext
 	public DbSet<Mesaj> Mesajlar => Set<Mesaj>();
 	public DbSet<OgrenciSohbetGrubu> OgrenciSohbetGruplari => Set<OgrenciSohbetGrubu>();
 	public DbSet<PersonelNobeti> PersonelNobetleri => Set<PersonelNobeti>();
+	public DbSet<Izin> Izinler => Set<Izin>();
+	public DbSet<IzinTuru> IzinTurleri => Set<IzinTuru>();
 	public DbSet<Sikayet> Sikayetler => Set<Sikayet>();
 	public DbSet<SohbetGrubu> SohbetGruplari => Set<SohbetGrubu>();
 	public DbSet<Sohbet> Sohbetler => Set<Sohbet>();

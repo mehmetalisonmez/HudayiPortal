@@ -3,9 +3,11 @@
 public class Duyuru
 {
 	public int Id { get; set; }
+	public int? OlusturanKullaniciId { get; set; }
 	public string Baslik { get; set; } = null!;
 	public string Icerik { get; set; } = null!;
 	public int? HedefRolId { get; set; }
+	public DateTime? GecerlilikTarihi { get; set; }
 	public DateTime? YayinTarihi { get; set; }
 	public DateTime? OlusturulmaTarihi { get; set; }
 	public DateTime? GuncellenmeTarihi { get; set; }

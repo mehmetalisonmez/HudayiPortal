@@ -4,6 +4,7 @@ using HudayiPortal.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HudayiPortal.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260321123529_AddedIzinModule")]
+    partial class AddedIzinModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,9 +113,6 @@ namespace HudayiPortal.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<DateTime?>("GecerlilikTarihi")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("GuncellenmeTarihi")
                         .HasColumnType("datetime2");
 
@@ -122,9 +122,6 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.Property<string>("Icerik")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OlusturanKullaniciId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("OlusturulmaTarihi")
                         .ValueGeneratedOnAdd()
@@ -800,9 +797,6 @@ namespace HudayiPortal.Infrastructure.Migrations
 
                     b.Property<int>("GonderenKullaniciId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("GuncellenmeTarihi")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Icerik")
                         .IsRequired()

@@ -34,6 +34,8 @@ public class Kullanici
 	public ICollection<MaliIslem> MaliIslemler { get; set; } = new List<MaliIslem>();
 	public ICollection<Mesaj> GonderilenMesajlar { get; set; } = new List<Mesaj>();
 	public ICollection<Mesaj> AlinanMesajlar { get; set; } = new List<Mesaj>();
+	public ICollection<Izin> IzinTalepleri { get; set; } = new List<Izin>();
+	public ICollection<Izin> OnaylananIzinTalepleri { get; set; } = new List<Izin>();
 	public ICollection<OgrenciSohbetGrubu> OgrenciSohbetGruplari { get; set; } = new List<OgrenciSohbetGrubu>();
 	public ICollection<PersonelNobeti> PersonelNobetleri { get; set; } = new List<PersonelNobeti>();
 	public ICollection<Sikayet> Sikayetler { get; set; } = new List<Sikayet>();
