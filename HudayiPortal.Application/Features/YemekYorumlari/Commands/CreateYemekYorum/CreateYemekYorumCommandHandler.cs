@@ -1,3 +1,4 @@
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
@@ -7,10 +8,12 @@ namespace HudayiPortal.Application.Features.YemekYorumlari.Commands.CreateYemekY
 public sealed class CreateYemekYorumCommandHandler : IRequestHandler<CreateYemekYorumCommand, int>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICurrentUserService _currentUserService;
 
-	public CreateYemekYorumCommandHandler(IUnitOfWork unitOfWork)
+	public CreateYemekYorumCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
 	{
 		_unitOfWork = unitOfWork;
+		_currentUserService = currentUserService;
 	}
 
 	public async Task<int> Handle(CreateYemekYorumCommand request, CancellationToken cancellationToken)
@@ -18,7 +21,7 @@ public sealed class CreateYemekYorumCommandHandler : IRequestHandler<CreateYemek
 		var yorum = new YemekYorumu
 		{
 			YemekMenuId = request.YemekMenuId,
-			KullaniciId = 1,
+			KullaniciId = _currentUserService.UserId,
 			YorumMetni = request.YorumMetni,
 			Puan = request.Puan,
 			OlusturulmaTarihi = DateTime.UtcNow,

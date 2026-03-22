@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HudayiPortal.Application.Features.Auth.Queries.Login;
 
-public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponse>
+public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponseDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -17,10 +17,10 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespons
 		_jwtTokenGenerator = jwtTokenGenerator;
 	}
 
-	public async Task<LoginResponse> Handle(LoginQuery request, CancellationToken cancellationToken)
+	public async Task<LoginResponseDto> Handle(LoginQuery request, CancellationToken cancellationToken)
 	{
 		var kullanici = await _unitOfWork.Repository<Kullanici>()
-			.Where(k => k.Email == request.Email && k.SilindiMi != true && k.AktifMi == true)
+			.Where(k => k.Email == request.Email && k.SilindiMi != true)
 			.Include(k => k.Rol)
 			.FirstOrDefaultAsync(cancellationToken);
 
@@ -35,15 +35,8 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespons
 		if (!isPasswordValid)
 			throw new UnauthorizedAccessException("E-posta veya þifre hatalý.");
 
-		var token = _jwtTokenGenerator.GenerateToken(kullanici, kullanici.Rol.RolAdi);
+ 		var token = _jwtTokenGenerator.GenerateToken(kullanici, kullanici.RolId.ToString());
 
-		return new LoginResponse(
-			KullaniciId: kullanici.Id,
-			Ad: kullanici.Ad,
-			Soyad: kullanici.Soyad,
-			Email: kullanici.Email!,
-			Rol: kullanici.Rol.RolAdi,
-			Token: token
-		);
+		return new LoginResponseDto(token);
 	}
 }

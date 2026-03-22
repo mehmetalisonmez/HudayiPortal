@@ -1,8 +1,10 @@
-using HudayiPortal.API.Hubs;
 using HudayiPortal.API.Middleware;
 using HudayiPortal.Application;
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Application.Settings;
 using HudayiPortal.Infrastructure;
+using HudayiPortal.Infrastructure.Hubs;
+using HudayiPortal.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;

@@ -1,3 +1,4 @@
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
@@ -7,10 +8,12 @@ namespace HudayiPortal.Application.Features.Yoklamalar.Commands.TakeAttendance;
 public sealed class TakeAttendanceCommandHandler : IRequestHandler<TakeAttendanceCommand, int>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICurrentUserService _currentUserService;
 
-	public TakeAttendanceCommandHandler(IUnitOfWork unitOfWork)
+	public TakeAttendanceCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
 	{
 		_unitOfWork = unitOfWork;
+		_currentUserService = currentUserService;
 	}
 
 	public async Task<int> Handle(TakeAttendanceCommand request, CancellationToken cancellationToken)
@@ -22,7 +25,7 @@ public sealed class TakeAttendanceCommandHandler : IRequestHandler<TakeAttendanc
 			Tarih = request.Tarih,
 			Durum = o.Durum,
 			Aciklama = o.Aciklama,
-			YoklamayiAlanPersonelId = 1,
+			YoklamayiAlanPersonelId = _currentUserService.UserId,
 			OlusturulmaTarihi = DateTime.UtcNow,
 			SilindiMi = false
 		}).ToList();

@@ -1,4 +1,4 @@
-using HudayiPortal.Application.Features.Mesajlar.Queries.GetMesajGecmisi;
+using HudayiPortal.Application.Features.Mesajlar.Queries.GetMesajlar;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +17,15 @@ public class MesajController : ControllerBase
 		_mediator = mediator;
 	}
 
-	[HttpGet("gecmis")]
+	[HttpGet]
 	[ProducesResponseType(typeof(List<MesajDto>), StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	public async Task<IActionResult> GetMesajGecmisi(
+	public async Task<IActionResult> GetMesajlar(
 		[FromQuery] int? aliciId,
 		[FromQuery] int? chatGrupId,
 		CancellationToken cancellationToken)
 	{
-		var query = new GetMesajGecmisiQuery(aliciId, chatGrupId);
+		var query = new GetMesajlarQuery(aliciId, chatGrupId);
 		var result = await _mediator.Send(query, cancellationToken);
 		return Ok(result);
 	}

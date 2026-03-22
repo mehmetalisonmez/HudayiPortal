@@ -1,3 +1,4 @@
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
@@ -7,10 +8,12 @@ namespace HudayiPortal.Application.Features.Izinler.Commands.UpdateIzinDurumu;
 public sealed class UpdateIzinDurumuCommandHandler : IRequestHandler<UpdateIzinDurumuCommand, bool>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICurrentUserService _currentUserService;
 
-	public UpdateIzinDurumuCommandHandler(IUnitOfWork unitOfWork)
+	public UpdateIzinDurumuCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
 	{
 		_unitOfWork = unitOfWork;
+		_currentUserService = currentUserService;
 	}
 
 	public async Task<bool> Handle(UpdateIzinDurumuCommand request, CancellationToken cancellationToken)
@@ -24,7 +27,7 @@ public sealed class UpdateIzinDurumuCommandHandler : IRequestHandler<UpdateIzinD
 		}
 
 		izin.OnayDurumu = request.YeniDurum;
-		izin.OnaylayanPersonelId = 2;
+		izin.OnaylayanPersonelId = _currentUserService.UserId;
 		izin.GuncellenmeTarihi = DateTime.UtcNow;
 
 		_unitOfWork.Repository<Izin>().Update(izin);
