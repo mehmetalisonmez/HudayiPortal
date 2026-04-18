@@ -1,4 +1,4 @@
-using HudayiPortal.API.Middleware;
+using HudayiPortal.API.Middlewares; // YENİ: Global Exception Handler için
 using HudayiPortal.Application;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Application.Settings;
@@ -16,6 +16,10 @@ builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+// YENİ: Modern Global Exception Handler Kayıtları
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;
@@ -47,13 +51,13 @@ builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("SignalRPolicy", policy =>
-    {
-        policy.SetIsOriginAllowed(_ => true) // Test için tüm adreslere izin ver
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // SignalR'ın çalışması için bu şarttır!
-    });
+	options.AddPolicy("SignalRPolicy", policy =>
+	{
+		policy.SetIsOriginAllowed(_ => true) // Test için tüm adreslere izin ver
+			  .AllowAnyHeader()
+			  .AllowAnyMethod()
+			  .AllowCredentials(); // SignalR'ın çalışması için bu şarttır!
+	});
 });
 
 builder.Services.AddControllers();
@@ -64,13 +68,17 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// YENİ: Eski middleware yerine yeni IExceptionHandler sistemini kullanıyoruz
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
 	app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

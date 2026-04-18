@@ -23,5 +23,7 @@
     <ProjectReference Include="..\HudayiPortal.Application\HudayiPortal.Application.csproj" />
     <ProjectReference Include="..\HudayiPortal.Infrastructure\HudayiPortal.Infrastructure.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<Watch Remove="wwwroot\**\*" />
+	</ItemGroup>
 </Project>

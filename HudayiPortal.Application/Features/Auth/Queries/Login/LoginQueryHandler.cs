@@ -35,7 +35,17 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespons
 		if (!isPasswordValid)
 			throw new UnauthorizedAccessException("E-posta veya þifre hatalý.");
 
- 		var token = _jwtTokenGenerator.GenerateToken(kullanici, kullanici.RolId.ToString());
+		// YENÝ EKLENEN KISIM: RolId'yi Controller'larýn beklediði metinlere (Claim'lere) çeviriyoruz
+		string roleName = kullanici.RolId switch
+		{
+			1 => "Öðrenci",
+			2 => "Admin",
+			3 => "Personel",
+			_ => "Öðrenci"
+		};
+
+		// Artýk rakam yerine, dönüþtürdüðümüz "Admin" veya "Personel" metnini gönderiyoruz
+		var token = _jwtTokenGenerator.GenerateToken(kullanici, roleName);
 
 		return new LoginResponseDto(token);
 	}

@@ -1,12 +1,9 @@
-using FluentEmail.Core;
-using FluentEmail.Smtp;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Application.Settings;
 using HudayiPortal.Domain.Repositories;
 using HudayiPortal.Infrastructure.Persistence;
 using HudayiPortal.Infrastructure.Repositories;
 using HudayiPortal.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,6 +48,7 @@ public static class InfrastructureServiceRegistration
 		services.AddScoped<IEmailService, EmailService>();
 		services.AddHttpContextAccessor();
 		services.AddScoped<ICurrentUserService, CurrentUserService>();
+		services.AddScoped<IFileService, LocalFileService>();
 
 		return services;
 	}
