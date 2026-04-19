@@ -21,5 +21,13 @@ public class IzinTuruConfiguration : IEntityTypeConfiguration<IzinTuru>
 
 		builder.Property(i => i.SilindiMi)
 			.HasDefaultValue(false);
+
+		// Başlangıç verileri (Seed Data)
+		builder.HasData(
+			new IzinTuru { Id = 11, TurAdi = "Evci İzni", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new IzinTuru { Id = 12, TurAdi = "Hastalık İzni", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new IzinTuru { Id = 13, TurAdi = "Sosyal Faaliyet İzni", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new IzinTuru { Id = 14, TurAdi = "Mazeret İzni", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false }
+		);
 	}
 }
