@@ -30,7 +30,8 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
 			new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 			new(ClaimTypes.NameIdentifier, kullanici.Id.ToString()),
 			new(ClaimTypes.Name, $"{kullanici.Ad} {kullanici.Soyad}"),
-			new(ClaimTypes.Role, rolAdi)
+			new(ClaimTypes.Role, rolAdi),
+			new("roleId", kullanici.RolId.ToString())
 		};
 
 		var token = new JwtSecurityToken(

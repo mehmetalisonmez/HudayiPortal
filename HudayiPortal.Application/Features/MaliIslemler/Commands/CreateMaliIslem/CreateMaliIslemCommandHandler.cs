@@ -23,6 +23,8 @@ public sealed class CreateMaliIslemCommandHandler : IRequestHandler<CreateMaliIs
 			Tutar = request.Tutar,
 			IslemTarihi = request.IslemTarihi,
 			IlgiliKullaniciId = request.IlgiliKullaniciId,
+			KategoriId = request.KategoriId,
+			BelgeUrl = request.BelgeUrl,
 			OlusturulmaTarihi = DateTime.UtcNow,
 			SilindiMi = false
 		};

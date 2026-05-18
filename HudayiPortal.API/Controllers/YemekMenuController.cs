@@ -1,6 +1,11 @@
 using HudayiPortal.Application.Features.YemekMenuleri.Commands.CreateYemekMenu;
+using HudayiPortal.Application.Features.YemekMenuleri.Commands.CreateBulkYemekMenu;
+using HudayiPortal.Application.Features.YemekMenuleri.Commands.UpdateYemekMenu;
+using HudayiPortal.Application.Features.YemekMenuleri.Commands.DeleteYemekMenu;
 using HudayiPortal.Application.Features.YemekMenuleri.Queries.ExportAylikYemekMenu;
 using HudayiPortal.Application.Features.YemekMenuleri.Queries.GetAylikYemekMenu;
+using HudayiPortal.Application.Features.YemekMenuleri.Queries.GetStandartKahvaltiList;
+using HudayiPortal.Application.Features.YemekMenuleri.Queries.GetYemekTanimlari;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +37,19 @@ public class YemekMenuController : ControllerBase
 		return CreatedAtAction(nameof(Create), new { id }, id);
 	}
 
+	[HttpPost("bulk")]
+	[Authorize(Roles = "Admin,Personel")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	public async Task<IActionResult> BulkCreate(
+		[FromBody] CreateBulkYemekMenuCommand command,
+		CancellationToken cancellationToken)
+	{
+		var count = await _mediator.Send(command, cancellationToken);
+		return Ok(count);
+	}
+
 	[HttpGet("aylik")]
 	[ProducesResponseType(typeof(List<YemekMenuDto>), StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -42,6 +60,24 @@ public class YemekMenuController : ControllerBase
 	{
 		var query = new GetAylikYemekMenuQuery(yil, ay);
 		var result = await _mediator.Send(query, cancellationToken);
+		return Ok(result);
+	}
+
+	[HttpGet("yemek-tanimlari")]
+	[ProducesResponseType(typeof(List<YemekTanimiListItemDto>), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	public async Task<IActionResult> GetYemekTanimlari(CancellationToken cancellationToken)
+	{
+		var result = await _mediator.Send(new GetYemekTanimlariListQuery(), cancellationToken);
+		return Ok(result);
+	}
+
+	[HttpGet("standart-kahvalti")]
+	[ProducesResponseType(typeof(List<StandartKahvaltiDto>), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	public async Task<IActionResult> GetStandartKahvalti(CancellationToken cancellationToken)
+	{
+		var result = await _mediator.Send(new GetStandartKahvaltiListQuery(), cancellationToken);
 		return Ok(result);
 	}
 
@@ -61,5 +97,36 @@ public class YemekMenuController : ControllerBase
 			fileBytes,
 			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 			$"YemekMenu_{yil}_{ay:D2}.xlsx");
+	}
+
+	[HttpPut("{id}")]
+	[Authorize(Roles = "Admin,Personel")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<IActionResult> Update(
+		[FromRoute] int id,
+		[FromBody] UpdateYemekMenuCommand command,
+		CancellationToken cancellationToken)
+	{
+		if (id != command.Id)
+			return BadRequest("Route id ile body id eşleşmiyor.");
+
+		await _mediator.Send(command, cancellationToken);
+		return NoContent();
+	}
+
+	[HttpDelete("{id}")]
+	[Authorize(Roles = "Admin,Personel")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	public async Task<IActionResult> Delete(
+		[FromRoute] int id,
+		CancellationToken cancellationToken)
+	{
+		await _mediator.Send(new DeleteYemekMenuCommand(id), cancellationToken);
+		return NoContent();
 	}
 }

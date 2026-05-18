@@ -1,6 +1,9 @@
 using HudayiPortal.Application.Features.Yoklamalar.Commands.TakeAttendance;
 using HudayiPortal.Application.Features.Yoklamalar.Queries.ExportAylikYoklama;
+using HudayiPortal.Application.Features.Yoklamalar.Queries.ExportGunlukYoklamaToExcel;
 using HudayiPortal.Application.Features.Yoklamalar.Queries.GetOgrencilerForYoklama;
+using HudayiPortal.Application.Features.Yoklamalar.Queries.GetYoklamaByDateAndType;
+using HudayiPortal.Application.Features.Yoklamalar.Queries.GetYoklamaTurleri;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +20,29 @@ public class YoklamaController : ControllerBase
 	public YoklamaController(IMediator mediator)
 	{
 		_mediator = mediator;
+	}
+
+	[HttpGet("turler")]
+	[Authorize(Roles = "Admin,Personel")]
+	[ProducesResponseType(typeof(List<YoklamaTuruDto>), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	public async Task<IActionResult> GetYoklamaTurleri(CancellationToken cancellationToken)
+	{
+		var result = await _mediator.Send(new GetYoklamaTurleriQuery(), cancellationToken);
+		return Ok(result);
+	}
+
+	[HttpGet("gunluk")]
+	[Authorize(Roles = "Admin,Personel")]
+	[ProducesResponseType(typeof(List<OgrenciYoklamaDurumDto>), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+	public async Task<IActionResult> GetGunlukYoklama(
+		[FromQuery] DateOnly tarih,
+		[FromQuery] int yoklamaTurId,
+		CancellationToken cancellationToken)
+	{
+		var result = await _mediator.Send(new GetYoklamaByDateAndTypeQuery(tarih, yoklamaTurId), cancellationToken);
+		return Ok(result);
 	}
 
 	[HttpGet("ogrenciler")]

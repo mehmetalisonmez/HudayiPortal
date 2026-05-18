@@ -42,5 +42,14 @@ public class MaliIslemConfiguration : IEntityTypeConfiguration<MaliIslem>
 			.WithMany(k => k.MaliIslemler)
 			.HasForeignKey(m => m.IlgiliKullaniciId)
 			.OnDelete(DeleteBehavior.NoAction);
+
+		builder.Property(m => m.BelgeUrl)
+			.HasMaxLength(500);
+
+		builder.HasOne(m => m.Kategori)
+			.WithMany(k => k.MaliIslemler)
+			.HasForeignKey(m => m.KategoriId)
+			.IsRequired(false)
+			.OnDelete(DeleteBehavior.NoAction);
 	}
 }

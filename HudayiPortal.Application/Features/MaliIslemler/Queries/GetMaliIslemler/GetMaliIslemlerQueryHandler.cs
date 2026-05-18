@@ -21,6 +21,7 @@ public sealed class GetMaliIslemlerQueryHandler
 			.Where(m => m.SilindiMi == false)
 			.Include(m => m.Yon)
 			.Include(m => m.IlgiliKullanici)
+			.Include(m => m.Kategori)
 			.AsQueryable();
 
 		if (request.YonId.HasValue)
@@ -38,16 +39,25 @@ public sealed class GetMaliIslemlerQueryHandler
 			query = query.Where(m => m.IslemTarihi <= request.BitisTarihi.Value);
 		}
 
+		if (request.KategoriId.HasValue)
+		{
+			query = query.Where(m => m.KategoriId == request.KategoriId.Value);
+		}
+
 		var result = await query
 			.OrderByDescending(m => m.IslemTarihi)
 			.Select(m => new MaliIslemDto(
 				m.Id,
+				m.YonId,
 				m.Yon.YonAdi,
 				m.Baslik,
 				m.Aciklama,
 				m.Tutar,
 				m.IslemTarihi,
-				m.IlgiliKullanici != null ? $"{m.IlgiliKullanici.Ad} {m.IlgiliKullanici.Soyad}" : null))
+				m.IlgiliKullanici != null ? $"{m.IlgiliKullanici.Ad} {m.IlgiliKullanici.Soyad}" : null,
+				m.KategoriId,
+				m.Kategori != null ? m.Kategori.KategoriAdi : null,
+				m.BelgeUrl))
 			.ToListAsync(cancellationToken);
 
 		return result;

@@ -23,8 +23,7 @@ public sealed class UpdateDuyuruCommandHandler : IRequestHandler<UpdateDuyuruCom
 
 		duyuru.Baslik = request.Baslik;
 		duyuru.Icerik = request.Icerik;
-		duyuru.GecerlilikTarihi = request.GecerlilikTarihi;
-		duyuru.HedefRolId = request.HedefRolId;
+        duyuru.YayinTarihi = request.YayinTarihi;
 		duyuru.GuncellenmeTarihi = DateTime.UtcNow;
 
 		_unitOfWork.Repository<Duyuru>().Update(duyuru);

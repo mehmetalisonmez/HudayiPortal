@@ -19,7 +19,9 @@ public class ApplicationDbContext : DbContext
 	public DbSet<Etkinlik> Etkinlikler => Set<Etkinlik>();
 	public DbSet<EtkinlikKatilimcisi> EtkinlikKatilimcilari => Set<EtkinlikKatilimcisi>();
 	public DbSet<EtkinlikYorumu> EtkinlikYorumlari => Set<EtkinlikYorumu>();
+	public DbSet<EtkinlikBegeni> EtkinlikBegenileri => Set<EtkinlikBegeni>();
 	public DbSet<GelirGiderYonu> GelirGiderYonleri => Set<GelirGiderYonu>();
+	public DbSet<IslemKategorileri> IslemKategorileri => Set<IslemKategorileri>();
 	public DbSet<GunlukYoklama> GunlukYoklamalar => Set<GunlukYoklama>();
 	public DbSet<MaliIslem> MaliIslemler => Set<MaliIslem>();
 	public DbSet<Mesaj> Mesajlar => Set<Mesaj>();

@@ -20,4 +20,5 @@ public class Etkinlik
 	public Kullanici? OlusturanPersonel { get; set; }
 	public ICollection<EtkinlikKatilimcisi> EtkinlikKatilimcilari { get; set; } = new List<EtkinlikKatilimcisi>();
 	public ICollection<EtkinlikYorumu> EtkinlikYorumlari { get; set; } = new List<EtkinlikYorumu>();
+	public ICollection<EtkinlikBegeni> Begeniler { get; set; } = new List<EtkinlikBegeni>();
 }

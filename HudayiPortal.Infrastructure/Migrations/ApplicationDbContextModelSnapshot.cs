@@ -210,6 +210,35 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.ToTable("Etkinlikler", (string)null);
                 });
 
+            modelBuilder.Entity("HudayiPortal.Domain.Entities.EtkinlikBegeni", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EtkinlikId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KullaniciId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OlusturulmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("KullaniciId");
+
+                    b.HasIndex("EtkinlikId", "KullaniciId")
+                        .IsUnique();
+
+                    b.ToTable("EtkinlikBegenileri", (string)null);
+                });
+
             modelBuilder.Entity("HudayiPortal.Domain.Entities.EtkinlikKatilimcisi", b =>
                 {
                     b.Property<int>("Id")
@@ -361,6 +390,39 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.HasIndex("YoklamayiAlanPersonelId");
 
                     b.ToTable("GunlukYoklamalar", (string)null);
+                });
+
+            modelBuilder.Entity("HudayiPortal.Domain.Entities.IslemKategorileri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("KategoriAdi")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("OlusturulmaTarihi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<bool?>("SilindiMi")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("YonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YonId");
+
+                    b.ToTable("IslemKategorileri", (string)null);
                 });
 
             modelBuilder.Entity("HudayiPortal.Domain.Entities.Izin", b =>
@@ -582,6 +644,10 @@ namespace HudayiPortal.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("BelgeUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<DateTime?>("GuncellenmeTarihi")
                         .HasColumnType("datetime2");
 
@@ -590,6 +656,9 @@ namespace HudayiPortal.Infrastructure.Migrations
 
                     b.Property<DateTime>("IslemTarihi")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("KategoriId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("OlusturulmaTarihi")
                         .ValueGeneratedOnAdd()
@@ -610,6 +679,8 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IlgiliKullaniciId");
+
+                    b.HasIndex("KategoriId");
 
                     b.HasIndex("YonId");
 
@@ -748,10 +819,9 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.Property<DateTime?>("GuncellenmeTarihi")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("NobetTuru")
-                        .IsRequired()
+                    b.Property<int>("NobetTuru")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("OlusturulmaTarihi")
                         .ValueGeneratedOnAdd()
@@ -1039,6 +1109,43 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("YemekKategorileri", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 101,
+                            KategoriAdi = "Çorba",
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false
+                        },
+                        new
+                        {
+                            Id = 102,
+                            KategoriAdi = "Ana Yemek",
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false
+                        },
+                        new
+                        {
+                            Id = 103,
+                            KategoriAdi = "Yardımcı Yemek",
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false
+                        },
+                        new
+                        {
+                            Id = 104,
+                            KategoriAdi = "Ekstra",
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false
+                        },
+                        new
+                        {
+                            Id = 105,
+                            KategoriAdi = "Kahvaltılık Sıcak",
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false
+                        });
                 });
 
             modelBuilder.Entity("HudayiPortal.Domain.Entities.YemekMenusu", b =>
@@ -1141,6 +1248,143 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.HasIndex("KategoriId");
 
                     b.ToTable("YemekTanimlari", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 101,
+                            Kalori = 150,
+                            KategoriId = 101,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Mercimek Çorbası"
+                        },
+                        new
+                        {
+                            Id = 102,
+                            Kalori = 130,
+                            KategoriId = 101,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Ezogelin Çorbası"
+                        },
+                        new
+                        {
+                            Id = 103,
+                            Kalori = 120,
+                            KategoriId = 101,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Domates Çorbası"
+                        },
+                        new
+                        {
+                            Id = 104,
+                            Kalori = 350,
+                            KategoriId = 102,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Kuru Fasulye"
+                        },
+                        new
+                        {
+                            Id = 105,
+                            Kalori = 400,
+                            KategoriId = 102,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Orman Kebabı"
+                        },
+                        new
+                        {
+                            Id = 106,
+                            Kalori = 320,
+                            KategoriId = 102,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Tavuk Sote"
+                        },
+                        new
+                        {
+                            Id = 107,
+                            Kalori = 380,
+                            KategoriId = 102,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Etli Nohut"
+                        },
+                        new
+                        {
+                            Id = 108,
+                            Kalori = 250,
+                            KategoriId = 103,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Pirinç Pilavı"
+                        },
+                        new
+                        {
+                            Id = 109,
+                            Kalori = 230,
+                            KategoriId = 103,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Bulgur Pilavı"
+                        },
+                        new
+                        {
+                            Id = 110,
+                            Kalori = 280,
+                            KategoriId = 103,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Makarna"
+                        },
+                        new
+                        {
+                            Id = 111,
+                            Kalori = 80,
+                            KategoriId = 104,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Cacık"
+                        },
+                        new
+                        {
+                            Id = 112,
+                            Kalori = 60,
+                            KategoriId = 104,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Mevsim Salata"
+                        },
+                        new
+                        {
+                            Id = 113,
+                            Kalori = 70,
+                            KategoriId = 104,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Ayran"
+                        },
+                        new
+                        {
+                            Id = 114,
+                            Kalori = 220,
+                            KategoriId = 105,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Menemen"
+                        },
+                        new
+                        {
+                            Id = 115,
+                            Kalori = 200,
+                            KategoriId = 105,
+                            OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            SilindiMi = false,
+                            YemekAdi = "Sahanda Yumurta"
+                        });
                 });
 
             modelBuilder.Entity("HudayiPortal.Domain.Entities.YemekYorumu", b =>
@@ -1263,6 +1507,25 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.Navigation("OlusturanPersonel");
                 });
 
+            modelBuilder.Entity("HudayiPortal.Domain.Entities.EtkinlikBegeni", b =>
+                {
+                    b.HasOne("HudayiPortal.Domain.Entities.Etkinlik", "Etkinlik")
+                        .WithMany("Begeniler")
+                        .HasForeignKey("EtkinlikId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HudayiPortal.Domain.Entities.Kullanici", "Kullanici")
+                        .WithMany()
+                        .HasForeignKey("KullaniciId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Etkinlik");
+
+                    b.Navigation("Kullanici");
+                });
+
             modelBuilder.Entity("HudayiPortal.Domain.Entities.EtkinlikKatilimcisi", b =>
                 {
                     b.HasOne("HudayiPortal.Domain.Entities.Etkinlik", "Etkinlik")
@@ -1327,6 +1590,17 @@ namespace HudayiPortal.Infrastructure.Migrations
                     b.Navigation("YoklamayiAlanPersonel");
                 });
 
+            modelBuilder.Entity("HudayiPortal.Domain.Entities.IslemKategorileri", b =>
+                {
+                    b.HasOne("HudayiPortal.Domain.Entities.GelirGiderYonu", "Yon")
+                        .WithMany("IslemKategorileri")
+                        .HasForeignKey("YonId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Yon");
+                });
+
             modelBuilder.Entity("HudayiPortal.Domain.Entities.Izin", b =>
                 {
                     b.HasOne("HudayiPortal.Domain.Entities.IzinTuru", "IzinTuru")
@@ -1378,6 +1652,11 @@ namespace HudayiPortal.Infrastructure.Migrations
                         .HasForeignKey("IlgiliKullaniciId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("HudayiPortal.Domain.Entities.IslemKategorileri", "Kategori")
+                        .WithMany("MaliIslemler")
+                        .HasForeignKey("KategoriId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("HudayiPortal.Domain.Entities.GelirGiderYonu", "Yon")
                         .WithMany("MaliIslemler")
                         .HasForeignKey("YonId")
@@ -1385,6 +1664,8 @@ namespace HudayiPortal.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("IlgiliKullanici");
+
+                    b.Navigation("Kategori");
 
                     b.Navigation("Yon");
                 });
@@ -1587,12 +1868,21 @@ namespace HudayiPortal.Infrastructure.Migrations
 
             modelBuilder.Entity("HudayiPortal.Domain.Entities.Etkinlik", b =>
                 {
+                    b.Navigation("Begeniler");
+
                     b.Navigation("EtkinlikKatilimcilari");
 
                     b.Navigation("EtkinlikYorumlari");
                 });
 
             modelBuilder.Entity("HudayiPortal.Domain.Entities.GelirGiderYonu", b =>
+                {
+                    b.Navigation("IslemKategorileri");
+
+                    b.Navigation("MaliIslemler");
+                });
+
+            modelBuilder.Entity("HudayiPortal.Domain.Entities.IslemKategorileri", b =>
                 {
                     b.Navigation("MaliIslemler");
                 });

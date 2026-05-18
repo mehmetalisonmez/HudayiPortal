@@ -18,7 +18,7 @@ public sealed class CreatePersonelNobetCommandHandler : IRequestHandler<CreatePe
 		var nobet = new PersonelNobeti
 		{
 			PersonelId = request.PersonelId,
-			Tarih = DateOnly.FromDateTime(request.Tarih),
+			Tarih = request.Tarih,
 			NobetTuru = request.NobetTuru,
 			Aciklama = request.Aciklama,
 			OlusturulmaTarihi = DateTime.UtcNow,

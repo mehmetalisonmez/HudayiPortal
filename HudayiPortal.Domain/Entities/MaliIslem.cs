@@ -9,6 +9,8 @@ public class MaliIslem
 	public decimal Tutar { get; set; }
 	public DateTime IslemTarihi { get; set; }
 	public int? IlgiliKullaniciId { get; set; }
+	public int? KategoriId { get; set; }
+	public string? BelgeUrl { get; set; }
 	public DateTime? OlusturulmaTarihi { get; set; }
 	public DateTime? GuncellenmeTarihi { get; set; }
 	public bool? SilindiMi { get; set; }
@@ -16,4 +18,5 @@ public class MaliIslem
 	// Navigation properties
 	public GelirGiderYonu Yon { get; set; } = null!;
 	public Kullanici? IlgiliKullanici { get; set; }
+	public IslemKategorileri? Kategori { get; set; }
 }

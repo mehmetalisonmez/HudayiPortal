@@ -17,13 +17,20 @@ public sealed class CurrentUserService : ICurrentUserService
 	{
 		get
 		{
-			var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-			if (int.TryParse(userIdClaim, out var userId))
-			{
-				return userId;
-			}
+			var claim = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+			return int.TryParse(claim, out var id) ? id : 0;
+		}
+	}
 
-			return 0;
+	public string Role =>
+		_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role) ?? string.Empty;
+
+	public int RoleId
+	{
+		get
+		{
+			var claim = _httpContextAccessor.HttpContext?.User?.FindFirstValue("roleId");
+			return int.TryParse(claim, out var id) ? id : 0;
 		}
 	}
 }

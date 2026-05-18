@@ -1,3 +1,4 @@
+using HudayiPortal.Application.Exceptions;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
@@ -28,7 +29,7 @@ public sealed class JoinEtkinlikCommandHandler : IRequestHandler<JoinEtkinlikCom
 
 		if (zatenKayitli)
 		{
-			throw new InvalidOperationException("Bu etkinliğe zaten kayıt oldunuz.");
+			throw new ValidationException("Zaten kayıtlısınız.", new List<string> { "Bu etkinliğe zaten kayıt oldunuz." });
 		}
 
 		var katilim = new EtkinlikKatilimcisi

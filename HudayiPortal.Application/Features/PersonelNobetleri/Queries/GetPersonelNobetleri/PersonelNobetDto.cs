@@ -1,3 +1,5 @@
+using HudayiPortal.Domain.Enums;
+
 namespace HudayiPortal.Application.Features.PersonelNobetleri.Queries.GetPersonelNobetleri;
 
 public sealed record PersonelNobetDto(
@@ -5,6 +7,6 @@ public sealed record PersonelNobetDto(
 	int PersonelId,
 	string PersonelAdSoyad,
 	DateTime Tarih,
-	string NobetTuru,
+	NobetTuru NobetTuru,
 	string? Aciklama
 );

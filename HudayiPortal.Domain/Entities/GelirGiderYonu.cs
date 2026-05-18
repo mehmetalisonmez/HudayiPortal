@@ -9,4 +9,5 @@ public class GelirGiderYonu
 
 	// Navigation properties
 	public ICollection<MaliIslem> MaliIslemler { get; set; } = new List<MaliIslem>();
+	public ICollection<IslemKategorileri> IslemKategorileri { get; set; } = new List<IslemKategorileri>();
 }

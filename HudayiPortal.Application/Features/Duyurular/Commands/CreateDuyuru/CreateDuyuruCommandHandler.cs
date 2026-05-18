@@ -23,10 +23,9 @@ public sealed class CreateDuyuruCommandHandler : IRequestHandler<CreateDuyuruCom
 			OlusturanKullaniciId = _currentUserService.UserId,
 			Baslik = request.Baslik,
 			Icerik = request.Icerik,
+			YayinTarihi = request.YayinTarihi,
 			GecerlilikTarihi = request.GecerlilikTarihi,
-			OlusturulmaTarihi = DateTime.UtcNow,
-            HedefRolId = request.HedefRolId,
-            SilindiMi = false
+			HedefRolId = request.HedefRolId
 		};
 
 		await _unitOfWork.Repository<Duyuru>().AddAsync(duyuru, cancellationToken);

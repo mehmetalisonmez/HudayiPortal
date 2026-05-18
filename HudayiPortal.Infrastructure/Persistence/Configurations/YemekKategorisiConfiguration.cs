@@ -21,5 +21,14 @@ public class YemekKategorisiConfiguration : IEntityTypeConfiguration<YemekKatego
 
 		builder.Property(y => y.SilindiMi)
 			.HasDefaultValue(false);
+
+		// Başlangıç verileri (Seed Data)
+		builder.HasData(
+			new YemekKategorisi { Id = 101, KategoriAdi = "Çorba", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new YemekKategorisi { Id = 102, KategoriAdi = "Ana Yemek", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new YemekKategorisi { Id = 103, KategoriAdi = "Yardımcı Yemek", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new YemekKategorisi { Id = 104, KategoriAdi = "Ekstra", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false },
+			new YemekKategorisi { Id = 105, KategoriAdi = "Kahvaltılık Sıcak", OlusturulmaTarihi = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc), SilindiMi = false }
+		);
 	}
 }
