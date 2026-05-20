@@ -1,3 +1,7 @@
-namespace HudayiPortal.Application.Features.Auth.Queries.Login;
+﻿namespace HudayiPortal.Application.Features.Auth.Queries.Login;
 
-public sealed record LoginResponseDto(string Token);
+public sealed record LoginResponseDto(
+	string? Token,
+	bool RequiresOtp = false,
+	string? Email = null
+);

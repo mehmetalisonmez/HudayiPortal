@@ -1,5 +1,6 @@
-using HudayiPortal.Application.Features.Auth.Commands.Register;
+﻿using HudayiPortal.Application.Features.Auth.Commands.Register;
 using HudayiPortal.Application.Features.Auth.Commands.VerifyEmail;
+using HudayiPortal.Application.Features.Auth.Commands.VerifyOtp;
 using HudayiPortal.Application.Features.Auth.Queries.Login;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,17 @@ public class AuthController : ControllerBase
 		CancellationToken cancellationToken)
 	{
 		var response = await _mediator.Send(query, cancellationToken);
+		return Ok(response);
+	}
+
+	[HttpPost("verify-otp")]
+	[ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	public async Task<IActionResult> VerifyOtp(
+		[FromBody] VerifyOtpCommand command,
+		CancellationToken cancellationToken)
+	{
+		var response = await _mediator.Send(command, cancellationToken);
 		return Ok(response);
 	}
 

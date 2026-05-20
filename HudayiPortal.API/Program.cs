@@ -1,4 +1,4 @@
-using HudayiPortal.API.Middlewares; // YENİ: Global Exception Handler için
+﻿using HudayiPortal.API.Middlewares; // YENİ: Global Exception Handler için
 using HudayiPortal.Application;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Application.Settings;
@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 // YENİ: Modern Global Exception Handler Kayıtları
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddMemoryCache();
 
 // JWT Authentication
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()!;

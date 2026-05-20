@@ -1,20 +1,28 @@
+ï»¿using System;
+using HudayiPortal.Application.Exceptions;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace HudayiPortal.Application.Features.Auth.Queries.Login;
 
 public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponseDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly IJwtTokenGenerator _jwtTokenGenerator;
+	private readonly IMemoryCache _memoryCache;
+	private readonly IEmailService _emailService;
 
-	public LoginQueryHandler(IUnitOfWork unitOfWork, IJwtTokenGenerator jwtTokenGenerator)
+	public LoginQueryHandler(
+		IUnitOfWork unitOfWork,
+		IMemoryCache memoryCache,
+		IEmailService emailService)
 	{
 		_unitOfWork = unitOfWork;
-		_jwtTokenGenerator = jwtTokenGenerator;
+		_memoryCache = memoryCache;
+		_emailService = emailService;
 	}
 
 	public async Task<LoginResponseDto> Handle(LoginQuery request, CancellationToken cancellationToken)
@@ -25,28 +33,30 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespons
 			.FirstOrDefaultAsync(cancellationToken);
 
 		if (kullanici is null)
-			throw new UnauthorizedAccessException("E-posta veya þifre hatalý.");
+			throw new BusinessException("LÃ¼tfen bilgilerinizi kontrol ediniz.");
 
 		if (string.IsNullOrEmpty(kullanici.SifreHash))
-			throw new UnauthorizedAccessException("Bu hesap için þifre tanýmlanmamýþ.");
+			throw new BusinessException("LÃ¼tfen bilgilerinizi kontrol ediniz.");
 
 		var isPasswordValid = BCrypt.Net.BCrypt.Verify(request.Sifre, kullanici.SifreHash);
 
 		if (!isPasswordValid)
-			throw new UnauthorizedAccessException("E-posta veya þifre hatalý.");
+			throw new BusinessException("LÃ¼tfen bilgilerinizi kontrol ediniz.");
 
-		// YENÝ EKLENEN KISIM: RolId'yi Controller'larýn beklediði metinlere (Claim'lere) çeviriyoruz
-		string roleName = kullanici.RolId switch
+		// Åžifre doÄŸru! OTP Ãœretimi
+		var otpCode = new Random().Next(100000, 999999).ToString();
+		
+		// Cache Ã¼zerinde 3 dakika saklayalÄ±m
+		var cacheKey = $"OTP_{kullanici.Email}";
+		_memoryCache.Set(cacheKey, otpCode, TimeSpan.FromMinutes(3));
+
+		// E-posta gÃ¶nderelim
+		if (!string.IsNullOrEmpty(kullanici.Email))
 		{
-			1 => "Öðrenci",
-			2 => "Admin",
-			3 => "Personel",
-			_ => "Öðrenci"
-		};
+			await _emailService.SendOtpEmailAsync(kullanici.Email, otpCode);
+		}
 
-		// Artýk rakam yerine, dönüþtürdüðümüz "Admin" veya "Personel" metnini gönderiyoruz
-		var token = _jwtTokenGenerator.GenerateToken(kullanici, roleName);
-
-		return new LoginResponseDto(token);
+		// Ä°lk adÄ±mda Token dÃ¶nmÃ¼yoruz, RequiresOtp durumunu iÅŸaretliyoruz
+		return new LoginResponseDto(Token: null, RequiresOtp: true, Email: kullanici.Email);
 	}
 }
