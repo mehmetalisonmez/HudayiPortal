@@ -3,6 +3,10 @@ using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HudayiPortal.Application.Features.Duyurular.Queries.GetDuyurular;
 
@@ -11,17 +15,27 @@ public sealed class GetDuyurularQueryHandler
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly ICurrentUserService _currentUserService;
+	private readonly ICacheService _cacheService;
 
-	public GetDuyurularQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+	public GetDuyurularQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ICacheService cacheService)
 	{
 		_unitOfWork = unitOfWork;
 		_currentUserService = currentUserService;
+		_cacheService = cacheService;
 	}
 
 	public async Task<List<DuyuruListDto>> Handle(
 		GetDuyurularQuery request,
 		CancellationToken cancellationToken)
 	{
+		const string cacheKey = "duyurular:aktif";
+
+		var cachedResult = await _cacheService.GetAsync<List<DuyuruListDto>>(cacheKey, cancellationToken);
+		if (cachedResult != null)
+		{
+			return cachedResult;
+		}
+
 		var role   = _currentUserService.Role;
 		var roleId = _currentUserService.RoleId;
 
@@ -46,6 +60,8 @@ public sealed class GetDuyurularQueryHandler
 				d.HedefRolId,
 				d.HedefRol != null ? d.HedefRol.RolAdi : null))
 			.ToListAsync(cancellationToken);
+
+		await _cacheService.SetAsync(cacheKey, result, TimeSpan.FromHours(1), cancellationToken);
 
 		return result;
 	}

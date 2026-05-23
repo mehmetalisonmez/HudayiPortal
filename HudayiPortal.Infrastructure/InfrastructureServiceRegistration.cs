@@ -50,6 +50,14 @@ public static class InfrastructureServiceRegistration
 		services.AddScoped<ICurrentUserService, CurrentUserService>();
 		services.AddScoped<IFileService, LocalFileService>();
 
+		var redisConnectionString = configuration.GetConnectionString("RedisConnection") ?? "localhost:6379";
+		services.AddStackExchangeRedisCache(options =>
+		{
+			options.Configuration = redisConnectionString;
+			options.InstanceName = "HudayiPortal_";
+		});
+		services.AddScoped<ICacheService, RedisCacheService>();
+
 		return services;
 	}
 }

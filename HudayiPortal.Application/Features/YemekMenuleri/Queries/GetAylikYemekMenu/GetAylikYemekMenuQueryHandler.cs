@@ -1,7 +1,12 @@
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HudayiPortal.Application.Features.YemekMenuleri.Queries.GetAylikYemekMenu;
 
@@ -9,16 +14,26 @@ public sealed class GetAylikYemekMenuQueryHandler
 	: IRequestHandler<GetAylikYemekMenuQuery, List<YemekMenuDto>>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICacheService _cacheService;
 
-	public GetAylikYemekMenuQueryHandler(IUnitOfWork unitOfWork)
+	public GetAylikYemekMenuQueryHandler(IUnitOfWork unitOfWork, ICacheService cacheService)
 	{
 		_unitOfWork = unitOfWork;
+		_cacheService = cacheService;
 	}
 
 	public async Task<List<YemekMenuDto>> Handle(
 		GetAylikYemekMenuQuery request,
 		CancellationToken cancellationToken)
 	{
+		var cacheKey = $"yemek:menu:{request.Yil}:{request.Ay}";
+
+		var cachedResult = await _cacheService.GetAsync<List<YemekMenuDto>>(cacheKey, cancellationToken);
+		if (cachedResult != null)
+		{
+			return cachedResult;
+		}
+
 		var baslangic = new DateOnly(request.Yil, request.Ay, 1);
 		var bitis = baslangic.AddMonths(1).AddDays(-1);
 
@@ -45,6 +60,8 @@ public sealed class GetAylikYemekMenuQueryHandler
 				m.KahvaltiSicak1 != null ? m.KahvaltiSicak1.YemekAdi : null,
 				m.KahvaltiSicak2 != null ? m.KahvaltiSicak2.YemekAdi : null))
 			.ToListAsync(cancellationToken);
+
+		await _cacheService.SetAsync(cacheKey, data, TimeSpan.FromHours(1), cancellationToken);
 
 		return data;
 	}

@@ -3,6 +3,7 @@ using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HudayiPortal.Application.Features.Yoklamalar.Commands.TakeAttendance;
 
@@ -10,11 +11,13 @@ public sealed class TakeAttendanceCommandHandler : IRequestHandler<TakeAttendanc
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly ICurrentUserService _currentUserService;
+	private readonly ILogger<TakeAttendanceCommandHandler> _logger;
 
-	public TakeAttendanceCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+	public TakeAttendanceCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<TakeAttendanceCommandHandler> logger)
 	{
 		_unitOfWork = unitOfWork;
 		_currentUserService = currentUserService;
+		_logger = logger;
 	}
 
 	public async Task<int> Handle(TakeAttendanceCommand request, CancellationToken cancellationToken)
@@ -62,6 +65,8 @@ public sealed class TakeAttendanceCommandHandler : IRequestHandler<TakeAttendanc
 			await repo.AddRangeAsync(yeniKayitlar, cancellationToken);
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+		_logger.LogInformation("Yoklama kaydı alındı. Tarih: {Tarih}, YoklamaTurId: {YoklamaTurId}, ToplamOgrenci: {ToplamOgrenci}", request.Tarih, request.YoklamaTurId, request.Ogrenciler.Count);
 
 		return request.Ogrenciler.Count;
 	}

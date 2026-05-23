@@ -1,16 +1,21 @@
+using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HudayiPortal.Application.Features.YemekMenuleri.Commands.CreateYemekMenu;
 
 public sealed class CreateYemekMenuCommandHandler : IRequestHandler<CreateYemekMenuCommand, int>
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly ICacheService _cacheService;
 
-	public CreateYemekMenuCommandHandler(IUnitOfWork unitOfWork)
+	public CreateYemekMenuCommandHandler(IUnitOfWork unitOfWork, ICacheService cacheService)
 	{
 		_unitOfWork = unitOfWork;
+		_cacheService = cacheService;
 	}
 
 	public async Task<int> Handle(CreateYemekMenuCommand request, CancellationToken cancellationToken)
@@ -31,6 +36,11 @@ public sealed class CreateYemekMenuCommandHandler : IRequestHandler<CreateYemekM
 
 		await _unitOfWork.Repository<YemekMenusu>().AddAsync(menu, cancellationToken);
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+		// Cache Invalidation
+		var cacheKey = $"yemek:menu:{request.Tarih.Year}:{request.Tarih.Month}";
+		await _cacheService.RemoveAsync(cacheKey, cancellationToken);
+		await _cacheService.RemoveAsync("yemek:menu", cancellationToken);
 
 		return menu.Id;
 	}

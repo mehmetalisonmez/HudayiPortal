@@ -1,27 +1,28 @@
-﻿using System;
+using System;
 using HudayiPortal.Application.Exceptions;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HudayiPortal.Application.Features.Auth.Queries.Login;
 
 public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginResponseDto>
 {
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly IMemoryCache _memoryCache;
+	private readonly ICacheService _cacheService;
 	private readonly IEmailService _emailService;
 
 	public LoginQueryHandler(
 		IUnitOfWork unitOfWork,
-		IMemoryCache memoryCache,
+		ICacheService cacheService,
 		IEmailService emailService)
 	{
 		_unitOfWork = unitOfWork;
-		_memoryCache = memoryCache;
+		_cacheService = cacheService;
 		_emailService = emailService;
 	}
 
@@ -46,9 +47,9 @@ public sealed class LoginQueryHandler : IRequestHandler<LoginQuery, LoginRespons
 		// Şifre doğru! OTP Üretimi
 		var otpCode = new Random().Next(100000, 999999).ToString();
 		
-		// Cache üzerinde 3 dakika saklayalım
-		var cacheKey = $"OTP_{kullanici.Email}";
-		_memoryCache.Set(cacheKey, otpCode, TimeSpan.FromMinutes(3));
+		// Redis üzerinde 3 dakika saklayalım
+		var cacheKey = $"otp:{kullanici.Email}";
+		await _cacheService.SetAsync(cacheKey, otpCode, TimeSpan.FromMinutes(3), cancellationToken);
 
 		// E-posta gönderelim
 		if (!string.IsNullOrEmpty(kullanici.Email))

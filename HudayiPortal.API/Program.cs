@@ -1,4 +1,4 @@
-﻿using HudayiPortal.API.Middlewares; // YENİ: Global Exception Handler için
+using HudayiPortal.API.Middlewares; // YENİ: Global Exception Handler için
 using HudayiPortal.Application;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Application.Settings;
@@ -8,8 +8,13 @@ using HudayiPortal.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((context, services, configuration) => configuration
+	.ReadFrom.Configuration(context.Configuration));
 
 // Add services to the container.
 builder.Services.AddApplicationServices();
@@ -44,6 +49,20 @@ builder.Services.AddAuthentication(options =>
 			Encoding.UTF8.GetBytes(jwtSettings.SecretKey)),
 		ClockSkew = TimeSpan.Zero
 	};
+
+	options.Events = new JwtBearerEvents
+	{
+		OnMessageReceived = context =>
+		{
+			var accessToken = context.Request.Query["access_token"];
+			var path = context.HttpContext.Request.Path;
+			if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chathub"))
+			{
+				context.Token = accessToken;
+			}
+			return Task.CompletedTask;
+		}
+	};
 });
 
 builder.Services.AddAuthorization();
@@ -72,6 +91,8 @@ var app = builder.Build();
 
 // YENİ: Eski middleware yerine yeni IExceptionHandler sistemini kullanıyoruz
 app.UseExceptionHandler();
+
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {

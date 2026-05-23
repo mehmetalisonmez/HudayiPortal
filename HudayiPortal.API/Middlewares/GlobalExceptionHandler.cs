@@ -1,7 +1,8 @@
-﻿using HudayiPortal.Application.Exceptions;
+using HudayiPortal.Application.Exceptions;
 using HudayiPortal.Application.Wrappers;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
+using Serilog;
 
 namespace HudayiPortal.API.Middlewares;
 
@@ -54,6 +55,8 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
 		}
 		else
 		{
+			Log.Error(exception, "Beklenmedik bir hata oluştu: {Message}", exception.Message);
+
 			httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 			errorResult = new ErrorResult
 			{

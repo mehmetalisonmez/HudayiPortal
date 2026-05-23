@@ -1,7 +1,11 @@
+using HudayiPortal.Application.Exceptions;
 using HudayiPortal.Application.Interfaces;
 using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HudayiPortal.Application.Features.Izinler.Commands.UpdateIzinDurumu;
 
@@ -18,6 +22,12 @@ public sealed class UpdateIzinDurumuCommandHandler : IRequestHandler<UpdateIzinD
 
 	public async Task<bool> Handle(UpdateIzinDurumuCommand request, CancellationToken cancellationToken)
 	{
+		var roleName = _currentUserService.Role;
+		if (roleName != "Admin" && roleName != "Personel")
+		{
+			throw new BusinessException("Bu işlem için yetkiniz bulunmamaktadır.");
+		}
+
 		var izin = await _unitOfWork.Repository<Izin>()
 			.GetByIdAsync(request.IzinId, cancellationToken);
 

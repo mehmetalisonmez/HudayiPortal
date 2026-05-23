@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +9,6 @@ using HudayiPortal.Domain.Entities;
 using HudayiPortal.Domain.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace HudayiPortal.Application.Features.Auth.Commands.VerifyOtp;
 
@@ -17,25 +16,26 @@ public sealed class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, 
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IJwtTokenGenerator _jwtTokenGenerator;
-	private readonly IMemoryCache _memoryCache;
+	private readonly ICacheService _cacheService;
 
 	public VerifyOtpCommandHandler(
 		IUnitOfWork unitOfWork,
 		IJwtTokenGenerator jwtTokenGenerator,
-		IMemoryCache memoryCache)
+		ICacheService cacheService)
 	{
 		_unitOfWork = unitOfWork;
 		_jwtTokenGenerator = jwtTokenGenerator;
-		_memoryCache = memoryCache;
+		_cacheService = cacheService;
 	}
 
 	public async Task<LoginResponseDto> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
 	{
-		var cacheKey = $"OTP_{request.Email}";
+		var cacheKey = $"otp:{request.Email}";
 		
-		if (!_memoryCache.TryGetValue(cacheKey, out string? cachedOtp))
+		var cachedOtp = await _cacheService.GetAsync<string>(cacheKey, cancellationToken);
+		if (cachedOtp == null)
 		{
-			throw new BusinessException("Doğrulama kodunun süresi dolmuş veya kod hiç gönderilmemiş.");
+			throw new BusinessException("Doğrulama kodunun süresi dolmuş veya kod geçersiz.");
 		}
 
 		if (cachedOtp != request.OtpCode)
@@ -44,7 +44,7 @@ public sealed class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, 
 		}
 
 		// Doğrulama başarılı – kod tek seferliktir, bellekten temizleyelim
-		_memoryCache.Remove(cacheKey);
+		await _cacheService.RemoveAsync(cacheKey, cancellationToken);
 
 		var kullanici = await _unitOfWork.Repository<Kullanici>()
 			.Where(k => k.Email == request.Email && k.SilindiMi != true)
